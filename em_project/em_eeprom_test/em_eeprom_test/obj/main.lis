@@ -1,0 +1,358 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+ 0000                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_EEP~1\EM_EEP~1\main.c
+ 0000                   .dbfunc e main _main fV
+ 0000           ;           read -> X+13
+ 0000           ;         buffer -> X+3
+ 0000           ;              i -> X+2
+ 0000           ;          delay -> X+0
+ 0000           _main::
+ 0000                   .dbline -1
+ 0000 10                push X
+ 0001 4F                mov X,SP
+ 0002 380E              add SP,14
+ 0004                   .dbline 12
+ 0004           ; #include <m8c.h>        // part specific constants and macros
+ 0004           ; #include "PSoCAPI.h"    // PSoC API definitions for all User Modules
+ 0004           ; #include <stdio.h>
+ 0004           ; 
+ 0004           ; #define DEVICE 0x50
+ 0004           ; #define ADDRESS 0x00
+ 0004           ; #define MIN 0
+ 0004           ; #define MAX 128
+ 0004           ; #define DELAY 15000
+ 0004           ; 
+ 0004           ; void main(void)
+ 0004           ; {
+ 0004                   .dbline 18
+ 0004           ;       unsigned int delay;
+ 0004           ;       unsigned char buffer[10];
+ 0004           ;       BYTE i;
+ 0004           ;       BYTE read;
+ 0004           ;       
+ 0004           ;       I2Cm_Start();
+ 0004 10                push X
+ 0005 7C0000            xcall _I2Cm_Start
+ 0008                   .dbline 19
+ 0008           ;       LCD_Start();
+ 0008 7C0000            xcall _LCD_Start
+ 000B                   .dbline 22
+ 000B           ;       
+ 000B           ;       
+ 000B           ;       I2Cm_fSendStart(DEVICE, I2Cm_WRITE);
+ 000B 5700              mov X,0
+ 000D 5050              mov A,80
+ 000F 7C0000            xcall _I2Cm_fSendStart
+ 0012                   .dbline 23
+ 0012           ;       I2Cm_fWrite(ADDRESS);
+ 0012 5000              mov A,0
+ 0014 7C0000            xcall _I2Cm_fWrite
+ 0017 20                pop X
+ 0018                   .dbline 24
+ 0018           ;       for (i = MIN; i < MAX; i++) {
+ 0018 560200            mov [X+2],0
+ 001B 804E              xjmp L5
+ 001D           L2:
+ 001D                   .dbline 24
+ 001D                   .dbline 25
+ 001D           ;               I2Cm_fWrite(0);
+ 001D 10                push X
+ 001E 5000              mov A,0
+ 0020 7C0000            xcall _I2Cm_fWrite
+ 0023 20                pop X
+ 0024                   .dbline 26
+ 0024           ;               if ( (i+1) % 8 == 0 ) {
+ 0024 5202              mov A,[X+2]
+ 0026 0101              add A,1
+ 0028 5300              mov [__r0],A
+ 002A 5008              mov A,8
+ 002C 08                push A
+ 002D 5100              mov A,[__r0]
+ 002F 08                push A
+ 0030 7C0000            xcall __divmodu_8X8_8
+ 0033 38FF              add SP,-1
+ 0035 18                pop A
+ 0036 3900              cmp A,0
+ 0038 B02F              jnz L6
+ 003A                   .dbline 27
+ 003A           ;                       I2Cm_SendStop();
+ 003A                   .dbline 27
+ 003A 10                push X
+ 003B 7C0000            xcall _I2Cm_SendStop
+ 003E 20                pop X
+ 003F                   .dbline 28
+ 003F           ;                       for (delay = 0; delay < DELAY; delay++); // NEEDED
+ 003F 560100            mov [X+1],0
+ 0042 560000            mov [X+0],0
+ 0045 8006              xjmp L11
+ 0047           L8:
+ 0047                   .dbline 28
+ 0047           L9:
+ 0047                   .dbline 28
+ 0047 7701              inc [X+1]
+ 0049 0F0000            adc [X+0],0
+ 004C           L11:
+ 004C                   .dbline 28
+ 004C 5201              mov A,[X+1]
+ 004E 1198              sub A,-104
+ 0050 5200              mov A,[X+0]
+ 0052 193A              sbb A,58
+ 0054 CFF2              jc L8
+ 0056           X1:
+ 0056                   .dbline 29
+ 0056           ;                       I2Cm_fSendStart(DEVICE, I2Cm_WRITE);
+ 0056 10                push X
+ 0057 5700              mov X,0
+ 0059 5050              mov A,80
+ 005B 7C0000            xcall _I2Cm_fSendStart
+ 005E 20                pop X
+ 005F                   .dbline 30
+ 005F           ;                       I2Cm_fWrite(i+1);
+ 005F 5202              mov A,[X+2]
+ 0061 0101              add A,1
+ 0063 10                push X
+ 0064 7C0000            xcall _I2Cm_fWrite
+ 0067 20                pop X
+ 0068                   .dbline 31
+ 0068           ;               }
+ 0068           L6:
+ 0068                   .dbline 32
+ 0068           ;       }
+ 0068           L3:
+ 0068                   .dbline 24
+ 0068 7702              inc [X+2]
+ 006A           L5:
+ 006A                   .dbline 24
+ 006A 3D0280            cmp [X+2],-128
+ 006D CFAF              jc L2
+ 006F           X2:
+ 006F                   .dbline 33
+ 006F           ;       I2Cm_SendStop();
+ 006F 10                push X
+ 0070 7C0000            xcall _I2Cm_SendStop
+ 0073 20                pop X
+ 0074 80E8              xjmp L13
+ 0076           L12:
+ 0076                   .dbline 53
+ 0076           ;       
+ 0076           ;       /*I2Cm_fSendStart(DEVICE, I2Cm_WRITE);
+ 0076           ;       I2Cm_fWrite(0);
+ 0076           ;       for (i = 0; i < 8; i++) {
+ 0076           ;               I2Cm_fWrite(i);
+ 0076           ;       }
+ 0076           ;       I2Cm_SendStop();
+ 0076           ;       
+ 0076           ;       for (delay = 0; delay < DELAY; delay++); // NEEDED
+ 0076           ;       
+ 0076           ;       I2Cm_fSendStart(DEVICE, I2Cm_WRITE);
+ 0076           ;       I2Cm_fWrite(8);
+ 0076           ;       for (i = 8; i < 16; i++) {
+ 0076           ;               I2Cm_fWrite(i);
+ 0076           ;       }
+ 0076           ;       I2Cm_SendStop();
+ 0076           ;       
+ 0076           ;       for (delay = 0; delay < DELAY; delay++); // NEEDED*/
+ 0076           ;       
+ 0076           ;       while (1) {
+ 0076                   .dbline 54
+ 0076           ;               I2Cm_fSendStart(DEVICE, I2Cm_WRITE);
+ 0076 10                push X
+ 0077 5700              mov X,0
+ 0079 5050              mov A,80
+ 007B 7C0000            xcall _I2Cm_fSendStart
+ 007E                   .dbline 55
+ 007E           ;               I2Cm_fWrite(ADDRESS);
+ 007E 5000              mov A,0
+ 0080 7C0000            xcall _I2Cm_fWrite
+ 0083                   .dbline 57
+ 0083           ;               
+ 0083           ;               I2Cm_fSendRepeatStart(DEVICE, I2Cm_READ);
+ 0083 5701              mov X,1
+ 0085 5050              mov A,80
+ 0087 7C0000            xcall _I2Cm_fSendRepeatStart
+ 008A 20                pop X
+ 008B                   .dbline 58
+ 008B           ;               for (i = MIN; i < MAX - 1; i++) {
+ 008B 560200            mov [X+2],0
+ 008E 8059              xjmp L18
+ 0090           L15:
+ 0090                   .dbline 58
+ 0090                   .dbline 59
+ 0090           ;                       for (delay = 0; delay < DELAY; delay++);
+ 0090 560100            mov [X+1],0
+ 0093 560000            mov [X+0],0
+ 0096 8006              xjmp L22
+ 0098           L19:
+ 0098                   .dbline 59
+ 0098           L20:
+ 0098                   .dbline 59
+ 0098 7701              inc [X+1]
+ 009A 0F0000            adc [X+0],0
+ 009D           L22:
+ 009D                   .dbline 59
+ 009D 5201              mov A,[X+1]
+ 009F 1198              sub A,-104
+ 00A1 5200              mov A,[X+0]
+ 00A3 193A              sbb A,58
+ 00A5 CFF2              jc L19
+ 00A7           X3:
+ 00A7                   .dbline 60
+ 00A7           ;                       csprintf(buffer, "%d  ", I2Cm_bRead(I2Cm_ACKslave));
+ 00A7 10                push X
+ 00A8 5001              mov A,1
+ 00AA 7C0000            xcall _I2Cm_bRead
+ 00AD 20                pop X
+ 00AE 5300              mov [__r1],A
+ 00B0 5000              mov A,0
+ 00B2 08                push A
+ 00B3 5100              mov A,[__r1]
+ 00B5 08                push A
+ 00B6 5003              mov A,>L23
+ 00B8 08                push A
+ 00B9 5003              mov A,<L23
+ 00BB 08                push A
+ 00BC 5A00              mov [__r1],X
+ 00BE 060003            add [__r1],3
+ 00C1 5000              mov A,0
+ 00C3 08                push A
+ 00C4 5100              mov A,[__r1]
+ 00C6 08                push A
+ 00C7 7C0000            xcall _csprintf
+ 00CA 38FA              add SP,-6
+ 00CC                   .dbline 61
+ 00CC           ;                       LCD_Position(0,0);
+ 00CC 10                push X
+ 00CD 5000              mov A,0
+ 00CF 5700              mov X,0
+ 00D1 7C0000            xcall _LCD_Position
+ 00D4 20                pop X
+ 00D5                   .dbline 62
+ 00D5           ;                       LCD_PrString(buffer);
+ 00D5 5A00              mov [__r1],X
+ 00D7 060003            add [__r1],3
+ 00DA 10                push X
+ 00DB 5100              mov A,[__r0]
+ 00DD 08                push A
+ 00DE 5100              mov A,[__r1]
+ 00E0 5C                mov X,A
+ 00E1 18                pop A
+ 00E2 7C0000            xcall _LCD_PrString
+ 00E5 20                pop X
+ 00E6                   .dbline 63
+ 00E6           ;               }
+ 00E6           L16:
+ 00E6                   .dbline 58
+ 00E6 7702              inc [X+2]
+ 00E8           L18:
+ 00E8                   .dbline 58
+ 00E8 3D027F            cmp [X+2],127
+ 00EB CFA4              jc L15
+ 00ED           X4:
+ 00ED                   .dbline 64
+ 00ED           ;               for (delay = 0; delay < DELAY; delay++);
+ 00ED 560100            mov [X+1],0
+ 00F0 560000            mov [X+0],0
+ 00F3 8006              xjmp L27
+ 00F5           L24:
+ 00F5                   .dbline 64
+ 00F5           L25:
+ 00F5                   .dbline 64
+ 00F5 7701              inc [X+1]
+ 00F7 0F0000            adc [X+0],0
+ 00FA           L27:
+ 00FA                   .dbline 64
+ 00FA 5201              mov A,[X+1]
+ 00FC 1198              sub A,-104
+ 00FE 5200              mov A,[X+0]
+ 0100 193A              sbb A,58
+ 0102 CFF2              jc L24
+ 0104           X5:
+ 0104                   .dbline 65
+ 0104           ;               csprintf(buffer, "%d", I2Cm_bRead(I2Cm_NAKslave));
+ 0104 10                push X
+ 0105 5000              mov A,0
+ 0107 7C0000            xcall _I2Cm_bRead
+ 010A 20                pop X
+ 010B 5300              mov [__r1],A
+ 010D 5000              mov A,0
+ 010F 08                push A
+ 0110 5100              mov A,[__r1]
+ 0112 08                push A
+ 0113 5000              mov A,>L28
+ 0115 08                push A
+ 0116 5000              mov A,<L28
+ 0118 08                push A
+ 0119 5A00              mov [__r1],X
+ 011B 060003            add [__r1],3
+ 011E 5000              mov A,0
+ 0120 08                push A
+ 0121 5100              mov A,[__r1]
+ 0123 08                push A
+ 0124 7C0000            xcall _csprintf
+ 0127 38FA              add SP,-6
+ 0129                   .dbline 66
+ 0129           ;               LCD_Position(0,0);
+ 0129 10                push X
+ 012A 5000              mov A,0
+ 012C 5700              mov X,0
+ 012E 7C0000            xcall _LCD_Position
+ 0131 20                pop X
+ 0132                   .dbline 67
+ 0132           ;               LCD_PrString(buffer);
+ 0132 5A00              mov [__r1],X
+ 0134 060003            add [__r1],3
+ 0137 10                push X
+ 0138 5100              mov A,[__r0]
+ 013A 08                push A
+ 013B 5100              mov A,[__r1]
+ 013D 5C                mov X,A
+ 013E 18                pop A
+ 013F 7C0000            xcall _LCD_PrString
+ 0142                   .dbline 69
+ 0142           ;               
+ 0142           ;               I2Cm_SendStop();
+ 0142 7C0000            xcall _I2Cm_SendStop
+ 0145 20                pop X
+ 0146                   .dbline 71
+ 0146           ;               
+ 0146           ;               for (delay = 0; delay < DELAY * 6; delay++);
+ 0146 560100            mov [X+1],0
+ 0149 560000            mov [X+0],0
+ 014C 8006              xjmp L32
+ 014E           L29:
+ 014E                   .dbline 71
+ 014E           L30:
+ 014E                   .dbline 71
+ 014E 7701              inc [X+1]
+ 0150 0F0000            adc [X+0],0
+ 0153           L32:
+ 0153                   .dbline 71
+ 0153 5201              mov A,[X+1]
+ 0155 1190              sub A,-112
+ 0157 5200              mov A,[X+0]
+ 0159 195F              sbb A,95
+ 015B CFF2              jc L29
+ 015D           X6:
+ 015D                   .dbline 72
+ 015D           ;       }
+ 015D           L13:
+ 015D                   .dbline 53
+ 015D 8F18              xjmp L12
+ 015F           X0:
+ 015F                   .dbline -2
+ 015F           L1:
+ 015F 38F2              add SP,-14
+ 0161 20                pop X
+ 0162                   .dbline 0 ; func end
+ 0162 8FFF              jmp .
+ 0164                   .dbsym l read 13 c
+ 0164                   .dbsym l buffer 3 A[10:10]c
+ 0164                   .dbsym l i 2 c
+ 0164                   .dbsym l delay 0 i
+ 0164                   .dbend
+                        .area lit(rom, con, rel, lit)
+ 0000           L28:
+ 0000 256400            .byte 37,'d,0
+ 0003           L23:
+ 0003 2564202000        .byte 37,'d,32,32,0

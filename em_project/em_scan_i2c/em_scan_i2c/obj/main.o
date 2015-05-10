@@ -1,0 +1,87 @@
+XH
+H 2 areas A global symbols
+M main.c
+S _LCD_PrHexByte Ref0000
+S _I2Cm_bWriteBytes Ref0000
+S __r0 Ref0000
+S __r1 Ref0000
+S __r3 Ref0000
+S __rX Ref0000
+S _LCD_Start Ref0000
+S _LCD_Position Ref0000
+S _I2Cm_Start Ref0000
+A text size B5 flags 0
+dbfile ./main.c
+dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_SCA~1\EM_SCA~1\main.c
+dbfunc e main 0 fV
+dbsym l data 4 A[2:2]c
+dbsym l status 3 c
+dbsym l device 2 c
+dbsym l delay 0 i
+dbline FFFFFFFF 0
+dbline 5 4
+dbline 8 4
+dbline B 26
+dbline C 29
+dbline E 2F
+dbline F 2F
+dbline F 34
+dbline 10 34
+dbline 11 51
+dbline 12 56
+dbline 12 56
+dbline 13 5F
+dbline 14 66
+dbline 14 6E
+dbline 14 6E
+dbline 14 73
+dbline 15 7D
+dbline 16 7F
+dbline 17 7F
+dbline 18 88
+dbline 19 8F
+dbline 19 97
+dbline 19 97
+dbline 19 9C
+dbline 1A A6
+dbline 1B A6
+dbline F A6
+dbline F A8
+dbline 1C AE
+dbline E AE
+dbline FFFFFFFE B0
+dbline 0 B3
+S _main Def0000
+A lit size 2 flags 1
+T 00 00 00 00
+R 00 00 00 01
+T 00 00 10 4F 38 06 55 00 00 00 00 55 00 00
+R 00 00 00 00 03 07 00 03 01 09 00 01 03 0C 00 02
+T 00 09 00 00 5A 00 00 06 00 00 04 10 55
+R 00 00 00 00 41 02 00 01 03 05 00 04 03 08 00 04
+T 00 11 00 00 00 51 00 00 58 00 00 08 28 3F
+R 00 00 00 00 03 02 00 05 03 06 00 02 03 09 00 03
+T 00 1A 00 00 18 75 09 00 76 00 00 3C 00 00 02 BF
+R 00 00 00 00 03 02 00 04 03 09 00 05 03 0C 00 05
+T 00 25 F2 7C 00 00 7C 00 00 20 80 80 56 02 00 80
+R 00 00 00 00 02 04 00 08 02 07 00 06
+T 00 33 75 10 50 00 08 50 02 08 5A 00 00 06 00 00
+R 00 00 00 00 03 0B 00 03 03 0E 00 03
+T 00 3F 04 51 00 00 08 51 00 00 08 52 02 08 7C
+R 00 00 00 00 03 04 00 02 03 08 00 03
+T 00 4A 00 00 38 FB 20 54 03 3D 03 00 A0 2A 10 50
+R 00 00 00 00 02 02 00 01
+T 00 58 00 57 00 7C 00 00 20 10 52 02 7C 00 00 20
+R 00 00 00 00 02 06 00 07 02 0D 00 00
+T 00 66 56 01 00 56 00 00 80 06 77 01 0F 00 00 52
+R 00 00 00 00
+T 00 74 01 11 30 52 00 19 75 CF F2 80 28 10 57 00
+R 00 00 00 00
+T 00 82 50 01 7C 00 00 20 10 52 02 7C 00 00 20 56
+R 00 00 00 00 02 05 00 07 02 0C 00 00
+T 00 90 01 00 56 00 00 80 06 77 01 0F 00 00 52 01
+R 00 00 00 00
+T 00 9E 11 D0 52 00 19 07 CF F2 77 02 50 FF 3B 02
+R 00 00 00 00
+T 00 AC DF 87 8F 80 38 FA 20 8F FF
+R 00 00 00 00

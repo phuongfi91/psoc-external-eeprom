@@ -1,0 +1,192 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+                        .area lit(rom, con, rel, lit)
+ 0000           L2:
+ 0000 0000              .byte 0,0
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+ 0000                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_SCA~1\EM_SCA~1\main.c
+ 0000                   .dbfunc e main _main fV
+ 0000           ;           data -> X+4
+ 0000           ;         status -> X+3
+ 0000           ;         device -> X+2
+ 0000           ;          delay -> X+0
+ 0000           _main::
+ 0000                   .dbline -1
+ 0000 10                push X
+ 0001 4F                mov X,SP
+ 0002 3806              add SP,6
+ 0004                   .dbline 5
+ 0004           ; #include <m8c.h>        // part specific constants and macros
+ 0004           ; #include "PSoCAPI.h"    // PSoC API definitions for all User Modules
+ 0004           ; 
+ 0004           ; void main(void)
+ 0004           ; {
+ 0004                   .dbline 8
+ 0004           ;       unsigned int delay;
+ 0004           ;       BYTE device;
+ 0004           ;       BYTE data[] = { 0x00, 0 };
+ 0004 550000            mov [__r1],<L2
+ 0007 550000            mov [__r0],>L2
+ 000A 5A00              mov [__r3],X
+ 000C 060004            add [__r3],4
+ 000F 10                push X
+ 0010 550000            mov [__rX],0
+ 0013 5100              mov A,[__r0]
+ 0015 5800              mov X,[__r1]
+ 0017           X1:
+ 0017 08                push A
+ 0018 28                romx
+ 0019 3F00              mvi [__r3],A
+ 001B 18                pop A
+ 001C 75                inc X
+ 001D 0900              adc A,0
+ 001F 7600              inc [__rX]
+ 0021 3C0002            cmp [__rX],2
+ 0024 BFF2              jnz X1
+ 0026                   .dbline 11
+ 0026           ;       BYTE status;
+ 0026           ;       
+ 0026           ;       I2Cm_Start();
+ 0026 7C0000            xcall _I2Cm_Start
+ 0029                   .dbline 12
+ 0029           ;       LCD_Start();
+ 0029 7C0000            xcall _LCD_Start
+ 002C 20                pop X
+ 002D 8080              xjmp L4
+ 002F           L3:
+ 002F                   .dbline 14
+ 002F           ; 
+ 002F           ;       while (1) {
+ 002F                   .dbline 15
+ 002F           ;               for (device = 0x00; device <= 0xFF; device++) {
+ 002F 560200            mov [X+2],0
+ 0032 8075              xjmp L9
+ 0034           L6:
+ 0034                   .dbline 15
+ 0034                   .dbline 16
+ 0034           ;                       status = I2Cm_bWriteBytes(device, data, 2, I2Cm_CompleteXfer);
+ 0034 10                push X
+ 0035 5000              mov A,0
+ 0037 08                push A
+ 0038 5002              mov A,2
+ 003A 08                push A
+ 003B 5A00              mov [__r1],X
+ 003D 060004            add [__r1],4
+ 0040 5100              mov A,[__r0]
+ 0042 08                push A
+ 0043 5100              mov A,[__r1]
+ 0045 08                push A
+ 0046 5202              mov A,[X+2]
+ 0048 08                push A
+ 0049 7C0000            xcall _I2Cm_bWriteBytes
+ 004C 38FB              add SP,-5
+ 004E 20                pop X
+ 004F 5403              mov [X+3],A
+ 0051                   .dbline 17
+ 0051           ;                       if (status != 0) {
+ 0051 3D0300            cmp [X+3],0
+ 0054 A02A              jz L10
+ 0056                   .dbline 18
+ 0056           ;                               LCD_Position(0,0);
+ 0056                   .dbline 18
+ 0056 10                push X
+ 0057 5000              mov A,0
+ 0059 5700              mov X,0
+ 005B 7C0000            xcall _LCD_Position
+ 005E 20                pop X
+ 005F                   .dbline 19
+ 005F           ;                               LCD_PrHexByte(device);
+ 005F 10                push X
+ 0060 5202              mov A,[X+2]
+ 0062 7C0000            xcall _LCD_PrHexByte
+ 0065 20                pop X
+ 0066                   .dbline 20
+ 0066           ;                               for (delay = 0; delay < 30000; delay++);
+ 0066 560100            mov [X+1],0
+ 0069 560000            mov [X+0],0
+ 006C 8006              xjmp L15
+ 006E           L12:
+ 006E                   .dbline 20
+ 006E           L13:
+ 006E                   .dbline 20
+ 006E 7701              inc [X+1]
+ 0070 0F0000            adc [X+0],0
+ 0073           L15:
+ 0073                   .dbline 20
+ 0073 5201              mov A,[X+1]
+ 0075 1130              sub A,48
+ 0077 5200              mov A,[X+0]
+ 0079 1975              sbb A,117
+ 007B CFF2              jc L12
+ 007D           X2:
+ 007D                   .dbline 21
+ 007D           ;                       }
+ 007D 8028              xjmp L11
+ 007F           L10:
+ 007F                   .dbline 22
+ 007F           ;                       else {
+ 007F                   .dbline 23
+ 007F           ;                               LCD_Position(1,0);
+ 007F 10                push X
+ 0080 5700              mov X,0
+ 0082 5001              mov A,1
+ 0084 7C0000            xcall _LCD_Position
+ 0087 20                pop X
+ 0088                   .dbline 24
+ 0088           ;                               LCD_PrHexByte(device);
+ 0088 10                push X
+ 0089 5202              mov A,[X+2]
+ 008B 7C0000            xcall _LCD_PrHexByte
+ 008E 20                pop X
+ 008F                   .dbline 25
+ 008F           ;                               for (delay = 0; delay < 2000; delay++);
+ 008F 560100            mov [X+1],0
+ 0092 560000            mov [X+0],0
+ 0095 8006              xjmp L19
+ 0097           L16:
+ 0097                   .dbline 25
+ 0097           L17:
+ 0097                   .dbline 25
+ 0097 7701              inc [X+1]
+ 0099 0F0000            adc [X+0],0
+ 009C           L19:
+ 009C                   .dbline 25
+ 009C 5201              mov A,[X+1]
+ 009E 11D0              sub A,-48
+ 00A0 5200              mov A,[X+0]
+ 00A2 1907              sbb A,7
+ 00A4 CFF2              jc L16
+ 00A6           X3:
+ 00A6                   .dbline 26
+ 00A6           ;                       }
+ 00A6           L11:
+ 00A6                   .dbline 27
+ 00A6           ;               }
+ 00A6           L7:
+ 00A6                   .dbline 15
+ 00A6 7702              inc [X+2]
+ 00A8           L9:
+ 00A8                   .dbline 15
+ 00A8 50FF              mov A,-1
+ 00AA 3B02              cmp A,[X+2]
+ 00AC DF87              jnc L6
+ 00AE           X4:
+ 00AE                   .dbline 28
+ 00AE           ;       }
+ 00AE           L4:
+ 00AE                   .dbline 14
+ 00AE 8F80              xjmp L3
+ 00B0           X0:
+ 00B0                   .dbline -2
+ 00B0           L1:
+ 00B0 38FA              add SP,-6
+ 00B2 20                pop X
+ 00B3                   .dbline 0 ; func end
+ 00B3 8FFF              jmp .
+ 00B5                   .dbsym l data 4 A[2:2]c
+ 00B5                   .dbsym l status 3 c
+ 00B5                   .dbsym l device 2 c
+ 00B5                   .dbsym l delay 0 i
+ 00B5                   .dbend

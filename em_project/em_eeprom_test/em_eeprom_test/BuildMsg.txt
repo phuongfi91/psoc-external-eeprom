@@ -1,0 +1,26 @@
+Starting MAKE...
+creating project.mk 
+
+lib/i2cm.asm
+
+lib/lcd.asm
+
+lib/psocconfig.asm
+
+lib/psocconfigtbl.asm
+
+!W C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_EEP~1\EM_EEP~1\main.c(71):[warning] overflow in converting constant expression from `int' to `unsigned int'
+
+./boot.asm
+
+Linking..
+
+  ROM 28% full. 4529 out of 16384 bytes used (does not include absolute areas).
+
+  RAM 19% full. 47 bytes used (does not include stack usage).
+
+Built with ICCM8C STD V7.05.00
+
+ 
+em_eeprom_test - 0 error(s) 1 warning(s) 20:37:12
+

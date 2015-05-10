@@ -1,0 +1,553 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+                        .area lit(rom, con, rel, lit)
+ 0000           _txCBuf::
+ 0000 0012              .byte 0,18
+ 0002 3408              .byte 52,8
+ 0004 0115              .byte 1,21
+ 0006 0302              .byte 3,2
+ 0008 93                .byte 147
+ 0009                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_PRO~1\EM_PRO~1\main.c
+ 0009                   .dbsym e txCBuf _txCBuf A[9:9]kc
+                        .area data(ram, con, rel)
+ 0000                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_PRO~1\EM_PRO~1\main.c
+ 0000           _gFlagButton1::
+ 0000                   .blkb 2
+                        .area idata(rom,lit)
+ 0000 0000              .word 0
+                        .area data(ram, con, rel)
+ 0002                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_PRO~1\EM_PRO~1\main.c
+ 0002                   .dbsym e gFlagButton1 _gFlagButton1 I
+ 0002           _gFlagButton2::
+ 0002                   .blkb 2
+                        .area idata(rom,lit)
+ 0002 0000              .word 0
+                        .area data(ram, con, rel)
+ 0004                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_PRO~1\EM_PRO~1\main.c
+ 0004                   .dbsym e gFlagButton2 _gFlagButton2 I
+ 0004           _gFlagButton3::
+ 0004                   .blkb 2
+                        .area idata(rom,lit)
+ 0004 0000              .word 0
+                        .area data(ram, con, rel)
+ 0006                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_PRO~1\EM_PRO~1\main.c
+ 0006                   .dbsym e gFlagButton3 _gFlagButton3 I
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_PRO~1\EM_PRO~1\main.c
+ 0000                   .dbfunc e buttonInterrupt _buttonInterrupt fV
+ 0000           _buttonInterrupt::
+ 0000                   .dbline -1
+ 0000 08                push A
+ 0001 5100              mov A,[__r0]
+ 0003 08                push A
+ 0004                   .dbline 29
+ 0004           ; //-----------------------------------------------------------------------
+ 0004           ; // Sample C code to communicate with the Dallas DS1307 clock/EEROM
+ 0004           ; // via the I2C interface.  
+ 0004           ; // 
+ 0004           ; // This code sets the time, then reads the 7-byte time string back
+ 0004           ; // over and over in a loop.  
+ 0004           ; // The address of the DS1307 is 0x68.
+ 0004           ; //-----------------------------------------------------------------------
+ 0004           ; 
+ 0004           ; #include <m8c.h>        // part specific constants and macros
+ 0004           ; #include "PSoCAPI.h"    // PSoC API definitions for all User Modules
+ 0004           ; #include <stdio.h>
+ 0004           ; 
+ 0004           ; #define DEVADD 0x50
+ 0004           ; 
+ 0004           ; BYTE rxBuf[8];
+ 0004           ; 
+ 0004           ; const BYTE txCBuf[] = { 0x00,          // Slave internal sub-address 0
+ 0004           ;                         0x12,0x34,0x08,  // Seconds and minutes in BCD                                          // 8:34:12am
+ 0004           ;                         0x01,          // Day of Week, Monday 
+ 0004           ;                      0x15,0x03,0x02,  // Day-Month-year  15-Mar-02
+ 0004           ;                         0x93 };          // Enable clock output
+ 0004           ; 
+ 0004           ; volatile int gFlagButton1 = 0;
+ 0004           ; volatile int gFlagButton2 = 0;
+ 0004           ; volatile int gFlagButton3 = 0;
+ 0004           ; 
+ 0004           ; #pragma interrupt_handler buttonInterrupt
+ 0004           ; void buttonInterrupt(void) {
+ 0004                   .dbline 30
+ 0004           ;       M8C_DisableIntMask(INT_MSK0, INT_MSK0_GPIO);
+ 0004 41E0DF            and REG[0xe0],-33
+ 0007                   .dbline 31
+ 0007           ;       if (Button1_Data_ADDR & Button1_MASK) {
+ 0007 5D04              mov A,REG[0x4]
+ 0009 5300              mov [__r0],A
+ 000B 470004            tst [__r0],4
+ 000E A009              jz L2
+ 0010                   .dbline 32
+ 0010           ;               gFlagButton1 = 1;
+ 0010                   .dbline 32
+ 0010 550101            mov [_gFlagButton1+1],1
+ 0013 550000            mov [_gFlagButton1],0
+ 0016                   .dbline 33
+ 0016           ;               return;
+ 0016 8026              xjmp L1
+ 0018           L2:
+ 0018                   .dbline 35
+ 0018           ;       }
+ 0018           ;       if (Button2_Data_ADDR & Button2_MASK) {
+ 0018 5D04              mov A,REG[0x4]
+ 001A 5300              mov [__r0],A
+ 001C 470002            tst [__r0],2
+ 001F A009              jz L4
+ 0021                   .dbline 36
+ 0021           ;               gFlagButton2 = 1;
+ 0021                   .dbline 36
+ 0021 550301            mov [_gFlagButton2+1],1
+ 0024 550200            mov [_gFlagButton2],0
+ 0027                   .dbline 37
+ 0027           ;               return;
+ 0027 8015              xjmp L1
+ 0029           L4:
+ 0029                   .dbline 39
+ 0029           ;       }
+ 0029           ;       if (Button3_Data_ADDR & Button3_MASK) {
+ 0029 5D04              mov A,REG[0x4]
+ 002B 5300              mov [__r0],A
+ 002D 470001            tst [__r0],1
+ 0030 A009              jz L6
+ 0032                   .dbline 40
+ 0032           ;               gFlagButton3 = 1;
+ 0032                   .dbline 40
+ 0032 550501            mov [_gFlagButton3+1],1
+ 0035 550400            mov [_gFlagButton3],0
+ 0038                   .dbline 41
+ 0038           ;               return;
+ 0038 8004              xjmp L1
+ 003A           L6:
+ 003A                   .dbline 43
+ 003A           ;       }
+ 003A           ;       M8C_EnableIntMask(INT_MSK0 , INT_MSK0_GPIO);
+ 003A 43E020            or REG[0xe0],32
+ 003D                   .dbline -2
+ 003D           L1:
+ 003D 18                pop A
+ 003E 5300              mov [__r0],A
+ 0040 18                pop A
+ 0041                   .dbline 0 ; func end
+ 0041 7E                reti
+ 0042                   .dbend
+                        .area lit(rom, con, rel, lit)
+ 0009           L9:
+ 0009 0000              .byte 0,0
+ 000B 93                .byte 147
+                        .area text(rom, con, rel)
+ 0042                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_PRO~1\EM_PRO~1\main.c
+ 0042                   .dbfunc e main _main fV
+ 0042           ;              j -> X+6
+ 0042           ;         status -> X+5
+ 0042           ;          count -> X+2
+ 0042           ;              i -> X+0
+ 0042           _main::
+ 0042                   .dbline -1
+ 0042 10                push X
+ 0043 4F                mov X,SP
+ 0044 3808              add SP,8
+ 0046                   .dbline 47
+ 0046           ; }
+ 0046           ; 
+ 0046           ; void main(void)
+ 0046           ; {
+ 0046                   .dbline 48
+ 0046           ;       int j = 0;
+ 0046 560700            mov [X+7],0
+ 0049 560600            mov [X+6],0
+ 004C                   .dbline 50
+ 004C           ;       int i;
+ 004C           ;       BYTE count[] = { 0x00, 0, 0x93 };
+ 004C 550009            mov [__r1],<L9
+ 004F 550009            mov [__r0],>L9
+ 0052 5A00              mov [__r3],X
+ 0054 060002            add [__r3],2
+ 0057 10                push X
+ 0058 550000            mov [__rX],0
+ 005B 5100              mov A,[__r0]
+ 005D 5800              mov X,[__r1]
+ 005F           X1:
+ 005F 08                push A
+ 0060 28                romx
+ 0061 3F00              mvi [__r3],A
+ 0063 18                pop A
+ 0064 75                inc X
+ 0065 0900              adc A,0
+ 0067 7600              inc [__rX]
+ 0069 3C0003            cmp [__rX],3
+ 006C BFF2              jnz X1
+ 006E 20                pop X
+ 006F                   .dbline 53
+ 006F           ;       BYTE status;
+ 006F           ;       
+ 006F           ;       M8C_EnableGInt ; // Uncomment this line to enable Global Interrupts
+ 006F 7101                      or  F, 01h
+ 0071           
+ 0071                   .dbline 54
+ 0071           ;       M8C_EnableIntMask(INT_MSK0 , INT_MSK0_GPIO); // Switch on the GPIO interrupt enable
+ 0071 43E020            or REG[0xe0],32
+ 0074                   .dbline 56
+ 0074           ;       
+ 0074           ;       I2Cm_Start();
+ 0074 10                push X
+ 0075 7C0000            xcall _I2Cm_Start
+ 0078                   .dbline 57
+ 0078           ;       LCD_Start();
+ 0078 7C0000            xcall _LCD_Start
+ 007B 20                pop X
+ 007C           L10:
+ 007C                   .dbline 59
+ 007C           ;       
+ 007C           ;       do {
+ 007C                   .dbline 60
+ 007C           ;               LCD_Position(0,12);
+ 007C 10                push X
+ 007D 570C              mov X,12
+ 007F 5000              mov A,0
+ 0081 7C0000            xcall _LCD_Position
+ 0084 20                pop X
+ 0085                   .dbline 61
+ 0085           ;               LCD_PrHexInt(j++);
+ 0085 5207              mov A,[X+7]
+ 0087 5300              mov [__r1],A
+ 0089 5206              mov A,[X+6]
+ 008B 5300              mov [__r0],A
+ 008D 5100              mov A,[__r1]
+ 008F 0101              add A,1
+ 0091 5407              mov [X+7],A
+ 0093 5100              mov A,[__r0]
+ 0095 0900              adc A,0
+ 0097 5406              mov [X+6],A
+ 0099 10                push X
+ 009A 5800              mov X,[__r0]
+ 009C 5100              mov A,[__r1]
+ 009E 7C0000            xcall _LCD_PrHexInt
+ 00A1                   .dbline 63
+ 00A1           ;               
+ 00A1           ;               LCD_Position(0,0);
+ 00A1 5000              mov A,0
+ 00A3 5700              mov X,0
+ 00A5 7C0000            xcall _LCD_Position
+ 00A8 20                pop X
+ 00A9                   .dbline 64
+ 00A9           ;               LCD_PrHexInt(count[1]);
+ 00A9 5203              mov A,[X+3]
+ 00AB 10                push X
+ 00AC 5700              mov X,0
+ 00AE 7C0000            xcall _LCD_PrHexInt
+ 00B1 20                pop X
+ 00B2                   .dbline 66
+ 00B2           ;               
+ 00B2           ;               if (gFlagButton1 == 1) {
+ 00B2 3C0000            cmp [_gFlagButton1],0
+ 00B5 B03B              jnz L14
+ 00B7 3C0101            cmp [_gFlagButton1+1],1
+ 00BA B036              jnz L14
+ 00BC           X2:
+ 00BC                   .dbline 67
+ 00BC           ;                       LCD_Position(1,0);
+ 00BC                   .dbline 67
+ 00BC 10                push X
+ 00BD 5700              mov X,0
+ 00BF 5001              mov A,1
+ 00C1 7C0000            xcall _LCD_Position
+ 00C4                   .dbline 68
+ 00C4           ;                       LCD_PrCString("INCREMENTED");
+ 00C4 5048              mov A,>L16
+ 00C6 08                push A
+ 00C7 5048              mov A,<L16
+ 00C9 5C                mov X,A
+ 00CA 18                pop A
+ 00CB 7C0000            xcall _LCD_PrCString
+ 00CE 20                pop X
+ 00CF                   .dbline 70
+ 00CF           ;                       
+ 00CF           ;                       count[1]++;
+ 00CF 7703              inc [X+3]
+ 00D1                   .dbline 71
+ 00D1           ;                       for (i = 0; i < 20000; i++);
+ 00D1 560100            mov [X+1],0
+ 00D4 560000            mov [X+0],0
+ 00D7           L18:
+ 00D7                   .dbline 71
+ 00D7           L19:
+ 00D7                   .dbline 71
+ 00D7 7701              inc [X+1]
+ 00D9 0F0000            adc [X+0],0
+ 00DC                   .dbline 71
+ 00DC 5201              mov A,[X+1]
+ 00DE 1120              sub A,32
+ 00E0 5200              mov A,[X+0]
+ 00E2 3180              xor A,-128
+ 00E4 19CE              sbb A,(78 ^ 0x80)
+ 00E6 CFF0              jc L18
+ 00E8           X3:
+ 00E8                   .dbline 73
+ 00E8           ;                       
+ 00E8           ;                       gFlagButton1 = 0;
+ 00E8 550100            mov [_gFlagButton1+1],0
+ 00EB 550000            mov [_gFlagButton1],0
+ 00EE                   .dbline 74
+ 00EE           ;                       M8C_EnableIntMask(INT_MSK0 , INT_MSK0_GPIO);
+ 00EE 43E020            or REG[0xe0],32
+ 00F1                   .dbline 75
+ 00F1           ;               }
+ 00F1           L14:
+ 00F1                   .dbline 77
+ 00F1           ;               
+ 00F1           ;               if (gFlagButton2 == 1) {
+ 00F1 3C0200            cmp [_gFlagButton2],0
+ 00F4 B06C              jnz L22
+ 00F6 3C0301            cmp [_gFlagButton2+1],1
+ 00F9 B067              jnz L22
+ 00FB           X4:
+ 00FB                   .dbline 78
+ 00FB           ;                       LCD_Position(1,0);
+ 00FB                   .dbline 78
+ 00FB 10                push X
+ 00FC 5700              mov X,0
+ 00FE 5001              mov A,1
+ 0100 7C0000            xcall _LCD_Position
+ 0103                   .dbline 79
+ 0103           ;                       LCD_PrCString("SAVING     ");
+ 0103 503C              mov A,>L24
+ 0105 08                push A
+ 0106 503C              mov A,<L24
+ 0108 5C                mov X,A
+ 0109 18                pop A
+ 010A 7C0000            xcall _LCD_PrCString
+ 010D 20                pop X
+ 010E                   .dbline 82
+ 010E           ;                       
+ 010E           ;                       // Save the number
+ 010E           ;                       status = I2Cm_bWriteBytes(DEVADD, count, 3, I2Cm_CompleteXfer);
+ 010E 10                push X
+ 010F 5000              mov A,0
+ 0111 08                push A
+ 0112 5003              mov A,3
+ 0114 08                push A
+ 0115 5A00              mov [__r1],X
+ 0117 060002            add [__r1],2
+ 011A 5100              mov A,[__r0]
+ 011C 08                push A
+ 011D 5100              mov A,[__r1]
+ 011F 08                push A
+ 0120 5050              mov A,80
+ 0122 08                push A
+ 0123 7C0000            xcall _I2Cm_bWriteBytes
+ 0126 38FB              add SP,-5
+ 0128 20                pop X
+ 0129 5405              mov [X+5],A
+ 012B                   .dbline 84
+ 012B           ;                       
+ 012B           ;                       if (status != 0) {
+ 012B 3D0500            cmp [X+5],0
+ 012E A016              jz L25
+ 0130                   .dbline 85
+ 0130           ;                               LCD_Position(1,0);
+ 0130                   .dbline 85
+ 0130 10                push X
+ 0131 5700              mov X,0
+ 0133 5001              mov A,1
+ 0135 7C0000            xcall _LCD_Position
+ 0138                   .dbline 86
+ 0138           ;                               LCD_PrCString("SAVED      ");
+ 0138 5030              mov A,>L27
+ 013A 08                push A
+ 013B 5030              mov A,<L27
+ 013D 5C                mov X,A
+ 013E 18                pop A
+ 013F 7C0000            xcall _LCD_PrCString
+ 0142 20                pop X
+ 0143                   .dbline 87
+ 0143           ;                       }
+ 0143 8014              xjmp L26
+ 0145           L25:
+ 0145                   .dbline 88
+ 0145           ;                       else {
+ 0145                   .dbline 89
+ 0145           ;                               LCD_Position(1,0);
+ 0145 10                push X
+ 0146 5700              mov X,0
+ 0148 5001              mov A,1
+ 014A 7C0000            xcall _LCD_Position
+ 014D                   .dbline 90
+ 014D           ;                               LCD_PrCString("FAILED     ");
+ 014D 5024              mov A,>L28
+ 014F 08                push A
+ 0150 5024              mov A,<L28
+ 0152 5C                mov X,A
+ 0153 18                pop A
+ 0154 7C0000            xcall _LCD_PrCString
+ 0157 20                pop X
+ 0158                   .dbline 91
+ 0158           ;                       }
+ 0158           L26:
+ 0158                   .dbline 93
+ 0158           ;                       
+ 0158           ;                       gFlagButton2 = 0;
+ 0158 550300            mov [_gFlagButton2+1],0
+ 015B 550200            mov [_gFlagButton2],0
+ 015E                   .dbline 94
+ 015E           ;                       M8C_EnableIntMask(INT_MSK0 , INT_MSK0_GPIO);
+ 015E 43E020            or REG[0xe0],32
+ 0161                   .dbline 95
+ 0161           ;               }
+ 0161           L22:
+ 0161                   .dbline 97
+ 0161           ;               
+ 0161           ;               if (gFlagButton3 == 1) {
+ 0161 3C0400            cmp [_gFlagButton3],0
+ 0164 B087              jnz L29
+ 0166 3C0501            cmp [_gFlagButton3+1],1
+ 0169 B082              jnz L29
+ 016B           X5:
+ 016B                   .dbline 98
+ 016B           ;                       LCD_Position(1,0);
+ 016B                   .dbline 98
+ 016B 10                push X
+ 016C 5700              mov X,0
+ 016E 5001              mov A,1
+ 0170 7C0000            xcall _LCD_Position
+ 0173                   .dbline 99
+ 0173           ;                       LCD_PrCString("LOADING    ");
+ 0173 5018              mov A,>L31
+ 0175 08                push A
+ 0176 5018              mov A,<L31
+ 0178 5C                mov X,A
+ 0179 18                pop A
+ 017A 7C0000            xcall _LCD_PrCString
+ 017D 20                pop X
+ 017E                   .dbline 102
+ 017E           ;                       
+ 017E           ;                       // Load the number
+ 017E           ;                       I2Cm_bWriteBytes(DEVADD, count, 1, I2Cm_NoStop);
+ 017E 10                push X
+ 017F 5002              mov A,2
+ 0181 08                push A
+ 0182 5001              mov A,1
+ 0184 08                push A
+ 0185 5A00              mov [__r1],X
+ 0187 060002            add [__r1],2
+ 018A 5100              mov A,[__r0]
+ 018C 08                push A
+ 018D 5100              mov A,[__r1]
+ 018F 08                push A
+ 0190 5050              mov A,80
+ 0192 08                push A
+ 0193 7C0000            xcall _I2Cm_bWriteBytes
+ 0196 38FB              add SP,-5
+ 0198 20                pop X
+ 0199 5300              mov [__r0],A
+ 019B                   .dbline 103
+ 019B           ;                       status = I2Cm_fReadBytes(DEVADD, &count[1], 1, I2Cm_RepStart);
+ 019B 10                push X
+ 019C 5001              mov A,1
+ 019E 08                push A
+ 019F 08                push A
+ 01A0 5A00              mov [__r1],X
+ 01A2 060003            add [__r1],3
+ 01A5 5100              mov A,[__r0]
+ 01A7 08                push A
+ 01A8 5100              mov A,[__r1]
+ 01AA 08                push A
+ 01AB 5050              mov A,80
+ 01AD 08                push A
+ 01AE 7C0000            xcall _I2Cm_fReadBytes
+ 01B1 38FB              add SP,-5
+ 01B3 20                pop X
+ 01B4 5405              mov [X+5],A
+ 01B6                   .dbline 105
+ 01B6           ;                       
+ 01B6           ;                       if (status != 0) {
+ 01B6 3D0500            cmp [X+5],0
+ 01B9 A016              jz L33
+ 01BB                   .dbline 106
+ 01BB           ;                               LCD_Position(1,0);
+ 01BB                   .dbline 106
+ 01BB 10                push X
+ 01BC 5700              mov X,0
+ 01BE 5001              mov A,1
+ 01C0 7C0000            xcall _LCD_Position
+ 01C3                   .dbline 107
+ 01C3           ;                               LCD_PrCString("LOADED     ");
+ 01C3 500C              mov A,>L35
+ 01C5 08                push A
+ 01C6 500C              mov A,<L35
+ 01C8 5C                mov X,A
+ 01C9 18                pop A
+ 01CA 7C0000            xcall _LCD_PrCString
+ 01CD 20                pop X
+ 01CE                   .dbline 108
+ 01CE           ;                       }
+ 01CE 8014              xjmp L34
+ 01D0           L33:
+ 01D0                   .dbline 109
+ 01D0           ;                       else {
+ 01D0                   .dbline 110
+ 01D0           ;                               LCD_Position(1,0);
+ 01D0 10                push X
+ 01D1 5700              mov X,0
+ 01D3 5001              mov A,1
+ 01D5 7C0000            xcall _LCD_Position
+ 01D8                   .dbline 111
+ 01D8           ;                               LCD_PrCString("FAILED     ");
+ 01D8 5024              mov A,>L28
+ 01DA 08                push A
+ 01DB 5024              mov A,<L28
+ 01DD 5C                mov X,A
+ 01DE 18                pop A
+ 01DF 7C0000            xcall _LCD_PrCString
+ 01E2 20                pop X
+ 01E3                   .dbline 112
+ 01E3           ;                       }
+ 01E3           L34:
+ 01E3                   .dbline 114
+ 01E3           ;                       
+ 01E3           ;                       gFlagButton3 = 0;
+ 01E3 550500            mov [_gFlagButton3+1],0
+ 01E6 550400            mov [_gFlagButton3],0
+ 01E9                   .dbline 115
+ 01E9           ;                       M8C_EnableIntMask(INT_MSK0 , INT_MSK0_GPIO);
+ 01E9 43E020            or REG[0xe0],32
+ 01EC                   .dbline 116
+ 01EC           ;               }
+ 01EC           L29:
+ 01EC                   .dbline 117
+ 01EC           ;       } while(1);
+ 01EC           L11:
+ 01EC                   .dbline 117
+ 01EC 8E8F              xjmp L10
+ 01EE           X0:
+ 01EE                   .dbline -2
+ 01EE           L8:
+ 01EE 38F8              add SP,-8
+ 01F0 20                pop X
+ 01F1                   .dbline 0 ; func end
+ 01F1 8FFF              jmp .
+ 01F3                   .dbsym l j 6 I
+ 01F3                   .dbsym l status 5 c
+ 01F3                   .dbsym l count 2 A[3:3]c
+ 01F3                   .dbsym l i 0 I
+ 01F3                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile C:\Users\PHUONG~1.NGU\DOCUME~1\PSOCDE~1.4PR\EM_PRO~1\EM_PRO~1\EM_PRO~1\main.c
+ 0000           _rxBuf::
+ 0000                   .blkb 8
+ 0008                   .dbsym e rxBuf _rxBuf A[8:8]c
+                        .area lit(rom, con, rel, lit)
+ 000C           L35:
+ 000C 4C4F41444544202020202000  .byte 'L,'O,'A,'D,'E,'D,32,32,32,32,32,0
+ 0018           L31:
+ 0018 4C4F4144494E472020202000  .byte 'L,'O,'A,'D,'I,'N,'G,32,32,32,32,0
+ 0024           L28:
+ 0024 4641494C4544202020202000  .byte 'F,'A,'I,'L,'E,'D,32,32,32,32,32,0
+ 0030           L27:
+ 0030 534156454420202020202000  .byte 'S,'A,'V,'E,'D,32,32,32,32,32,32,0
+ 003C           L24:
+ 003C 534156494E47202020202000  .byte 'S,'A,'V,'I,'N,'G,32,32,32,32,32,0
+ 0048           L16:
+ 0048 494E4352454D454E54454400  .byte 'I,'N,'C,'R,'E,'M,'E,'N,'T,'E,'D,0
